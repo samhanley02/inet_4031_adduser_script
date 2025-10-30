@@ -8,8 +8,6 @@ This program is meant to make adding users to a system fast, and easy. Instead o
 
 This program takes in a formated file and will automatically add users to the system based on the contents of said file.
 
-This section should start off with a paragraph description, then have subsections for the following:
-
 ### Input File Format
 The input file is formatted as follows: '(username):(password):(Lastname):(Firstname):(Group1, optional(, Group2, etc.))
 Each new user must be on a new line.
