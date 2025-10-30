@@ -12,6 +12,9 @@ import os
 import re
 import sys
 
+#Grabs the second command line argument which is either Y or N for dry run
+dryrun = sys.argv[1].upper()
+
 def main():
     for line in sys.stdin:
 
@@ -23,6 +26,13 @@ def main():
 
         #This if statement ignores any lines that are exactly 5 fields long or lines with comments
         if match or len(fields) != 5:
+            if (dryrun == 'Y'):
+                # If a match occurs, displays in console that a # was found indicating the line was skipped
+                if (match):
+                    print("line skipped due to #")
+                # If the fields is not 5 long, displays it to the console and states the line was skipped
+                if (len(fields) != 5):
+                    print("Number of fields != 5")
             continue
 
         #These three lines all relate to the passwd file because the file format is username:password:groups
@@ -37,19 +47,31 @@ def main():
         print("==> Creating account for %s..." % (username))
         #The variable cmd will now contain the entire adduser command for the gathered user
         cmd = "/usr/sbin/adduser --disabled-password --gecos '%s' %s" % (gecos,username)
-        os.system(cmd)
+        # If a drytun is occuring, skips the os.system call and only prints the command
+        if (dryrun == 'N'):
+            os.system(cmd)
+        else:
+            print(cmd)
         #This print statement ensures we know what user we are creating the account for.
         print("==> Setting the password for %s..." % (username))
         #This creates a shell command to set the users password
         cmd = "/bin/echo -ne '%s\n%s' | /usr/bin/sudo /usr/bin/passwd %s" % (password,password,username)
-        os.system(cmd)
+        # If a drytun is occuring, skips the os.system call and only prints the command
+        if (dryrun == 'N'):
+            os.system(cmd)
+        else:
+            print(cmd)
 
         for group in groups:
             #Checks if the group is not a placeholder, if it is a placeholder, no group is added, if it is a real group, the user is assigned to that group
             if group != '-':
                 print("==> Assigning %s to the %s group..." % (username,group))
                 cmd = "/usr/sbin/adduser %s %s" % (username,group)
-                os.system(cmd)
+                # If a drytun is occuring, skips the os.system call and only prints the command
+                if (dryrun == 'N'):
+                    os.system(cmd)
+                else:
+                    print(cmd)
 
 if __name__ == '__main__':
     main()
