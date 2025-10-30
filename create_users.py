@@ -38,22 +38,21 @@ def main():
         #The variable cmd will now contain the entire adduser command for the gathered user
         cmd = "/usr/sbin/adduser --disabled-password --gecos '%s' %s" % (gecos,username)
 
-        #os.system(cmd)
+        os.system(cmd)
 
         #This print statement ensures we know what user we are creating the account for.
         print("==> Setting the password for %s..." % (username))
         #This creates a shell command to set the users password
         cmd = "/bin/echo -ne '%s\n%s' | /usr/bin/sudo /usr/bin/passwd %s" % (password,password,username)
 
-        #os.system(cmd)
+        os.system(cmd)
 
         for group in groups:
             #Checks if the group is not a placeholder, if it is a placeholder, no group is added, if it is a real group, the user is assigned to that group
             if group != '-':
                 print("==> Assigning %s to the %s group..." % (username,group))
                 cmd = "/usr/sbin/adduser %s %s" % (username,group)
-                #print cmd
-                #os.system(cmd)
+                os.system(cmd)
 
 if __name__ == '__main__':
     main()
